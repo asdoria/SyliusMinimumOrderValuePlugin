@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Nedac\SyliusMinimumOrderValuePlugin\Form;
 
-use Nedac\SyliusMinimumOrderValuePlugin\Model\ChannelInterface;
+
+use Nedac\SyliusMinimumOrderValuePlugin\Model\MinimumOrderValueAwareInterface;
+use Nedac\SyliusMinimumOrderValuePlugin\StateMachine\Guard\MinimumOrderValueReached;
 use Sylius\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Sylius\Bundle\CurrencyBundle\Form\Type\CurrencyChoiceType;
 use Sylius\Bundle\MoneyBundle\Form\Type\MoneyType;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Currency\Model\CurrencyInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +34,6 @@ final class ChannelTypeExtension extends AbstractTypeExtension
             $options = [
                 'label' => 'nedac_sylius_minimum_order_value_plugin.ui.minimum_order_value',
                 'currency' => $currencyCode,
-                'attr' => ['disabled' => true],
                 'required' => false
             ];
 
@@ -87,6 +89,7 @@ final class ChannelTypeExtension extends AbstractTypeExtension
                 $channel = $event->getData();
                 $baseCurrency = $channel->getBaseCurrency();
                 if (null !== $baseCurrency) {
+                    /** @var MinimumOrderValueAwareInterface $channel */
                     $formModifier($form, $baseCurrency->getCode(), $channel->getMinimumOrderValue());
                 }
             }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nedac\SyliusMinimumOrderValuePlugin\StateMachine\Guard;
 
-use Nedac\SyliusMinimumOrderValuePlugin\Model\ChannelInterface;
+use Nedac\SyliusMinimumOrderValuePlugin\Model\MinimumOrderValueAwareInterface;
 use Sylius\Bundle\ShopBundle\Calculator\OrderItemsSubtotalCalculatorInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 
@@ -19,7 +19,7 @@ final class MinimumOrderValueReached
 
     public function isMinimumOrderValueReached(OrderInterface $order): bool
     {
-        /** @var ChannelInterface $channel */
+        /** @var MinimumOrderValueAwareInterface $channel */
         $channel = $order->getChannel();
         $minimumAmount = $channel->getMinimumOrderValue();
         if (null === $minimumAmount) {
